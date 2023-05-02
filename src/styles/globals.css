@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .flowers{
   background-image:url("/flowers.png");
   background-size:100%;
@@ -37,7 +36,7 @@
 }
 
 .wine-to-coral{
-  width:20vw;
+  width:240px;
   height:2em;
   background-color:theme('colors.wine');
   transition: 0.1s;
@@ -48,35 +47,71 @@
   background-color:theme('colors.coral');
 }
 
-.wine-to-coral:not(:hover){
+.wine-to-coral:not(:hover):not(.no-reverse){
   animation: winecoral-fade 0.1s;
   animation-direction: reverse;
 }
 
-@keyframes blueswipe{
+@keyframes blueify{
   0%{
+    width: 0;
     background-color:white;
+    transform: translateX(0);
   }
   100%{
+    width: 280px;
     background-color:theme('colors.paleblue');
+    transform: translateX(-140px);
   }
 }
 
 .inputfield{
-  width:24vw;
+  width:280px;
   height:1.8em;
   border-radius:0.3em;
-  transition:0.25s;
   border:none;
   outline:none;
+  z-index:2;
 }
 
-.inputfield:focus{
-  animation: blueify 0.25s;
+.container{
+  position:relative;
+  display:flex;
+}
+
+.inputfield:focus + .inputfield-above{
+  animation: blueify 0.5s;
+  width: 280px;
   background-color:theme('colors.paleblue');
+  transform: translateX(-140px);
 }
 
-.inputfield:not(:focus){
-  animation:blueify 0.25s;
+.inputfield:not(:focus) + .inputfield-above:not(.no-reverse){
+  animation:blueify 0.5s;
   animation-direction: reverse;
+}
+
+.inputfield-below{
+  position:absolute;
+  top:0;
+  left:0;
+  width:280px;
+  height:1.8em;
+  border-radius:0.3em;
+}
+
+.inputfield-above{
+  position:absolute;
+  top:0;
+  left:140px;
+  width:0vw;
+  height:1.8em;
+  border-radius:0.3em;
+  transition: 0.5s cubic-bezier(.12,.84,.28,.94);
+  z-index:1;
+}
+
+.language-button{
+  position:fixed;
+  z-index:110; 
 }
