@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.flowers{
+  background-image:url("/flowers.png");
+  background-size:100%;
+}
+
+.blurbg{
+  background-color:rgba(0, 0, 0, 0.5);
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  position:fixed;
+  backdrop-filter:blur(2px);
+  z-index:50;
+}
+
+.modalcenter{
+  transform: translate(-50%, 0);
+  position:relative;
+  left:50%;
+  z-index:100;
+}
+
+@keyframes winecoral-fade{
+  0%{
+    background-color:theme('colors.wine');
+  }
+  100%{
+    background-color:theme('colors.coral');
+  }
+}
+
+.wine-to-coral{
+  height:2em;
+  background-color:theme('colors.wine');
+  transition: 0.1s;
+}
+
+.wine-to-coral:hover{
+  animation: winecoral-fade 0.1s;
+  background-color:theme('colors.coral');
+}
+
+@keyframes blueify{
+  0%{
+    width: 0;
+    background-color:theme('colors.paleblue');
+    transform: translateX(0);
+  }
+  100%{
+    width: 280px;
+    background-color:white;
+    transform: translateX(-140px);
+  }
+}
+
+.inputfield{
+  width:280px;
+  height:1.8em;
+  border-radius:0.3em;
+  border:none;
+  outline:none;
+  z-index:2;
+}
+
+.container{
+  position:relative;
+  display:flex;
+}
+
+.inputfield:focus + .inputfield-above{
+  animation: blueify 0.3s;
+  width: 280px;
+  background-color:white;
+  transform: translateX(-140px);
+}
+
+.inputfield-below{
+  position:absolute;
+  top:0;
+  left:0;
+  width:280px;
+  height:1.8em;
+  border-radius:0.3em;
+}
+
+.inputfield-above{
+  position:absolute;
+  top:0;
+  left:140px;
+  width:0vw;
+  height:1.8em;
+  border-radius:0.3em;
+  transition: 0.3s cubic-bezier(.12,.84,.28,.94);
+  z-index:1;
+}
+
+.language-button{
+  position:fixed;
+  z-index:110; 
+  transform: scaleY(0);
+  transition: 0.3s cubic-bezier(.12,.84,.28,.94);
+}

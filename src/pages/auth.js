@@ -1,4 +1,6 @@
 import React from "react";
+import Link from "next/link";
+import Head from "next/head";
 import { useRouter } from "next/router";
 
 export default function Auth(){
@@ -7,9 +9,19 @@ export default function Auth(){
 
     return(
         <>
-            <p className="text-black text-2xl text-center">U{">"} {query.user}</p>
-            <p className="text-black text-2xl text-center">E{">"} {query.email}</p>
-            <p className="text-black text-2xl text-center">P{">"} {query.password}</p>
+            <Head>
+                <title>Auth</title>
+            </Head>
+            <div className="flex flex-col gap-[5px] items-center">
+                <p className="text-black text-2xl">USR{">"} {query.user}</p>
+                <p className="text-black text-2xl">PSW{">"} {query.password}</p>
+
+                <Link href="/">
+                    <button className="antblue-button w-[200px] text-white rounded-sm">
+                        {"<---"}
+                    </button>
+                </Link>
+            </div>
         </>
     )
 }
