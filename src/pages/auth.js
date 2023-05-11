@@ -13,7 +13,7 @@ export default function Auth(){
                 <title>Auth</title>
             </Head>
             <div className="flex flex-col gap-[5px] items-center">
-                <p className="text-black text-2xl">USR{">"} {query.user}</p>
+                <p className="text-black text-2xl">USR{">"} {query.username}</p>
                 <p className="text-black text-2xl">PSW{">"} {query.password}</p>
 
                 <Link href="/">

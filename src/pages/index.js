@@ -1,7 +1,7 @@
 import React from "react";
-import Link from "next/link";
 import Head from "next/head";
 
+import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
 export default function Home() {
@@ -17,6 +17,7 @@ export default function Home() {
   const [phoneButtonAnimate, setPhoneButtonAnimate] = React.useState(false);
 
   const { t, i18n } = useTranslation();
+  const router = useRouter();
 
   const lngs = [
     { code: "en", native: "English" },
@@ -28,20 +29,32 @@ export default function Home() {
     i18n.changeLanguage(code);
   };
 
-  const sendCreds = () => {
-      fetch("http://localhost:3000/api/auth", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({user:username, password:password})
-      }).then(
-        response => response.json()
-      ).then(data => {
-          console.log(data);
-        }
-      )
+  const verifyAuth = () => {
+    console.log("button clicked")
+    const currentInfo = () => {
+      return {username:username, password:password, phone:phone, verificationCode:verificationCode, mode:loginType}
+    }
+  
+    fetch("http://localhost:3000/api/login", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(currentInfo())
+    }).then(
+      response => response.json()
+    ).then(data => {
+      console.log(data);
+      if(data.code === 200){
+        router.push({pathname:'/auth', query:{username:data.info.username, password:data.info.password}})
+      }
+    }
+    )
   }
+
+  // React.useEffect(() => {
+  //   sendCreds({username:"johnroo2", password:"testpassword", phone: "16477659107", code: "111006", mode: "account"});
+  // }, [])
 
   const codesend = 111006;
 
@@ -173,11 +186,8 @@ export default function Home() {
                         </div>
                       </div>
                         
-                      <Link className="outline-none" href={{pathname:"/auth", query:
-                        {user:username, password:password}}}>
-                        <button className="antblue-button barwidth rounded-sm outline-none
-                          submit-text self-center mt-[1em]" onClick={()=>{}}>{t('submit')}</button>
-                      </Link>
+                      <button className="antblue-button barwidth rounded-sm outline-none
+                          submit-text self-center mt-[1em]" onClick={verifyAuth}>{t('submit')}</button>
                     </>
                   }
                   {loginType === "phone" &&
@@ -188,7 +198,16 @@ export default function Home() {
                         </label>
                         <div className="container">
                           <div className="inputfield-below barwidth bg-paleblue rounded-sm"/>
-                          <input id="phone-number" value={phone} maxLength={30} onChange={(info) => {setPhone(info.target.value)}}
+                          <input id="phone-number" value={phone} maxLength={15} onChange={(info) => {
+                            let output = "";
+                            for(let i = 0; i < info.target.value.length; i++){
+                              if(/^[0-9]*$/.test(info.target.value.charAt(i))){
+                                output += info.target.value.charAt(i);
+                              }
+                            }
+                            setPhone(output)
+                          
+                          }}
                               className="inputfield barwidth pl-[4%] text-black bg-transparent text-[1em] rounded-sm" placeholder=""/>
                           <div className="inputfield-above bg-palepaleblue rounded-sm"/>
                         </div>
@@ -212,7 +231,7 @@ export default function Home() {
                           }}
                               className="inputfield pl-[4%] text-black bg-transparent text-[1em] rounded-sm" placeholder=""/>
                           <div className="inputfield-small-above bg-palepaleblue rounded-sm"/>
-                          <button className="ml-[10px] w-[90px] rounded-sm inputfield-text getcode-button"
+                          <button className="ml-[10px] w-[90px] rounded-sm inputfield-text getcode-button outline-none"
                           onClick={() => {
                             setTimeout(() => {alert(`Your code is: ${codesend}`)}, 1000)
                           }}>
@@ -220,11 +239,8 @@ export default function Home() {
                         </div>
                       </div>
 
-                      <Link className="outline-none" href={{pathname:"/auth", query:
-                        {user:phone, password:verificationCode}}}>
-                        <button className="antblue-button barwidth rounded-sm outline-none
-                          submit-text self-center mt-[1em]" onClick={()=>{}}>{t('submit')}</button>
-                      </Link>
+                      <button className="antblue-button barwidth rounded-sm outline-none
+                          submit-text self-center mt-[1em]" onClick={verifyAuth}>{t('submit')}</button>
                     </>
                   }
               </div>
